@@ -61,6 +61,8 @@ class ScopedSymbolTable(object):
         self.insert(BuiltinTypeSymbol('INTEGER'))
         self.insert(BuiltinTypeSymbol('REAL'))
         self.insert(ProcedureSymbol("WRITELN"))
+        self.insert(ProcedureSymbol("READLN"))
+
 
     def __str__(self):
         h1 = 'SCOPE (SCOPED SYMBOL TABLE)'

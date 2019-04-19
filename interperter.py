@@ -124,6 +124,10 @@ class Interpreter(NodeVisitor):
         if call_name == 'WRITELN':
             for p in node.params:
                 print(self.visit(p))
+        elif call_name == 'READLN':
+            for p in node.params:
+                t = input()
+                self.current_frame.set(p.value, t)
 
     def visit_Call(self, node):
         call_name = node.procedure
