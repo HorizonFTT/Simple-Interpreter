@@ -27,9 +27,9 @@ class Interpreter(NodeVisitor):
     def visit_Program(self, node):
         frame = Frame(self.scopes['_global'])
         self.current_frame = frame
-        # self.call_stack.append(frame)
+        self.call_stack.append(frame)
         self.visit(node.block)
-        # self.call_stack.pop()
+        self.call_stack.pop()
         self.current_frame = frame.enclosing_frame
 
     def visit_Block(self, node):
@@ -127,6 +127,11 @@ class Interpreter(NodeVisitor):
         elif call_name == 'READLN':
             for p in node.params:
                 t = input()
+                p_type=self.current_frame.scope.lookup(p.value).type.name
+                if p_type == INTEGER:
+                    t = int(t)
+                elif p_type == REAL:
+                    t = float(t)
                 self.current_frame.set(p.value, t)
 
     def visit_Call(self, node):

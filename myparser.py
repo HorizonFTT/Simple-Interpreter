@@ -184,6 +184,8 @@ class Parser(object):
         """
         if self.current_token.type == BEGIN:
             node = self.compound_statement()
+            if self.current_token.type == SEMI:
+                self.eat(SEMI)
         elif self.current_token.type == IF:
             node = self.if_else()
         elif self.current_token.type == WHILE:
