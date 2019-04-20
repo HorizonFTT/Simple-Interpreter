@@ -59,24 +59,39 @@ class Parser(object):
                 self.eat(PROCEDURE)
                 proc_name = self.current_token.value
                 self.eat(ID)
-                params = []
-
-                if self.current_token.type == LPAREN:
-                    self.eat(LPAREN)
-
-                    params = self.formal_parameter_list()
-
-                    self.eat(RPAREN)
-
+                params = self.params()
                 self.eat(SEMI)
                 block_node = self.block()
                 proc_decl = ProcedureDecl(proc_name, params, block_node)
                 declarations.append(proc_decl)
                 self.eat(SEMI)
+            elif self.current_token.type == FUNCTION:
+                self.eat(FUNCTION)
+                func_name = self.current_token.value
+                self.eat(ID)
+                params = self.params()
+                self.eat(COLON)
+                func_type = self.type_spec()
+                self.eat(SEMI)
+                block_node = self.block()
+                func_decl = FunctionDecl(
+                    func_name, params, func_type, block_node)
+                declarations.append(func_decl)
+                self.eat(SEMI)
             else:
                 break
 
         return declarations
+
+    def params(self):
+        params = []
+
+        if self.current_token.type == LPAREN:
+            self.eat(LPAREN)
+            params = self.formal_parameter_list()
+            self.eat(RPAREN)
+
+        return params
 
     def formal_parameters(self):
         """ formal_parameters : ID (COMMA ID)* COLON type_spec """
@@ -339,6 +354,9 @@ class Parser(object):
             self.eat(LPAREN)
             node = self.expr()
             self.eat(RPAREN)
+            return node
+        elif token.type == CALL:
+            node = self.call()
             return node
         else:
             node = self.variable()

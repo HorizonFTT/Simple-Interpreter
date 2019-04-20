@@ -116,6 +116,10 @@ class ProcedureDecl(AST):
         self.params = params  # a list of Param nodes
         self.block_node = block_node
 
+class FunctionDecl(ProcedureDecl):
+    def __init__(self, proc_name, params, type_node, block_node):
+        super().__init__(proc_name, params, block_node)
+        self.type_node=type_node
 
 class Call(AST):
     def __init__(self, procedure, params=None):

@@ -119,15 +119,24 @@ class Interpreter(NodeVisitor):
         proc_name = node.proc_name
         self.current_frame.set(proc_name, node.block_node)
 
+    def visit_FunctionDecl(self, node):
+        self.visit_ProcedureDecl(node)
+
+    # def return_value(self, type_node):
+    #     value = self.current_frame.return_value
+    #     if type_node.value==INTEGER:
+    #         node=
+
     def call_bulidin(self, node):
         call_name = node.procedure
         if call_name == 'WRITELN':
             for p in node.params:
-                print(self.visit(p))
+                r = self.visit(p)
+                print(r)
         elif call_name == 'READLN':
             for p in node.params:
                 t = input()
-                p_type=self.current_frame.scope.lookup(p.value).type.name
+                p_type = self.current_frame.scope.lookup(p.value).type.name
                 if p_type == INTEGER:
                     t = int(t)
                 elif p_type == REAL:
@@ -137,28 +146,30 @@ class Interpreter(NodeVisitor):
     def visit_Call(self, node):
         call_name = node.procedure
         call_node = self.current_frame.get(call_name)
-        if call_node is None:
-            self.call_bulidin(node)
-            return
-        if self.current_frame.scope.scope_level == 1:
-            scope = self.scopes[call_name]
-        else:
-            level = self.current_frame.scope.scope_level + 1
+        level = self.current_frame.scope.scope_level + 1
+        scope = self.scopes.get(call_name)
+        if scope is None:
             scope = ScopedSymbolTable(
                 call_name, level, self.current_frame.scope)
         frame = Frame(scope, self.current_frame)
-        symbol = self.current_frame.scope.lookup(call_name)
-        formal_params = symbol.params
-        actual_params = node.params
-        for f, a in zip(formal_params, actual_params):
-            name = f.name
-            value = self.visit(a)
-            frame.set(name, value)
-        self.current_frame = frame
         self.call_stack.append(frame)
-        self.visit(call_node)
+        if call_node is None:
+            self.current_frame = frame
+            self.call_bulidin(node)
+        else:
+            symbol = self.current_frame.scope.lookup(call_name)
+            formal_params = symbol.params
+            actual_params = node.params
+            for f, a in zip(formal_params, actual_params):
+                name = f.name
+                value = self.visit(a)
+                frame.set(name, value)
+            self.current_frame = frame
+            self.visit(call_node)
         self.call_stack.pop()
+        return_value = self.current_frame.return_value
         self.current_frame = frame.enclosing_frame
+        return return_value
 
     def interpret(self):
         tree = self.tree

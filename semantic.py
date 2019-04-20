@@ -82,6 +82,9 @@ class SemanticAnalyzer(NodeVisitor):
         self.current_scope = self.current_scope.enclosing_scope
         logging.debug(' LEAVE scope: %s' % proc_name)
 
+    def visit_FunctionDecl(self, node):
+        self.visit_ProcedureDecl(node)
+
     def visit_VarDecl(self, node):
         type_name = node.type_node.value
         type_symbol = self.current_scope.lookup(type_name)

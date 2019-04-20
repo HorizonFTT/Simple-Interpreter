@@ -33,6 +33,7 @@ class Lexer(object):
         'BEGIN': Token(BEGIN, 'BEGIN'),
         'END': Token(END, 'END'),
         'PROCEDURE': Token(PROCEDURE, 'PROCEDURE'),
+        'FUNCTION': Token(FUNCTION, 'FUNCTION'),
         'IF': Token(IF, 'IF'),
         'THEN': Token(THEN, 'THEN'),
         'ELSE': Token(ELSE, 'ELSE'),
@@ -116,7 +117,7 @@ class Lexer(object):
             token = self.RESERVED_KEYWORDS.get(
                 result.upper(), Token(ID, result))
             self.is_declaration = False
-        if token.type == PROCEDURE:
+        if token.type in (PROCEDURE, FUNCTION):
             self.is_declaration = True
         return token
 
