@@ -30,7 +30,7 @@ BEGIN {Test}
    a := 1;
    r := 1;
    s := 'Hello World';
-   P1(a, s);
+   P1(a, s + ' Meow');
    WRITELN('Please enter a number to calculate the factorial:');
    READLN(a);
    WRITELN(P2(a));

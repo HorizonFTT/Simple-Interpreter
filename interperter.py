@@ -11,11 +11,12 @@ import sys
 
 class Interpreter(NodeVisitor):
 
-    def __init__(self):
+    def __init__(self, text=None):
         self.call_stack = []
         self.current_frame = None
 
-        text = open(sys.argv[1], 'r').read()
+        if text is None:
+            text = open(sys.argv[1], 'r').read()
 
         lexer = Lexer(text)
         parser = Parser(lexer)
