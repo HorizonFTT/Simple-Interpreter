@@ -1,8 +1,9 @@
-from tkinter import Tk, Text, Menu, filedialog, Label, Button, END, W, E, FALSE
+from tkinter import Tk, Text, Menu, filedialog, Label, Button, END, W, E, FALSE, font
 from tkinter.scrolledtext import ScrolledText
 from interperter import Interpreter
 import subprocess
 import sys
+
 
 class Editor():
 
@@ -11,15 +12,16 @@ class Editor():
         self.root = root
         self.file_path = None
         self.root.title('Pascal Interpreter')
+        ft = font.Font(family='Consolas', size=12)
 
         self.program_editor_label = Label(
-            root, text="Pascal Program: ", padx=10, pady=1)
+            root, text="Pascal Program: ", padx=10, pady=1, font=ft)
 
         self.program_editor_label.grid(
             sticky="W", row=0, column=0, columnspan=2, pady=3)
 
         self.program_editor = ScrolledText(
-            root, width=100, height=25, padx=10, pady=10)
+            root, width=100, height=25, padx=10, pady=10, font=ft)
 
         self.program_editor.grid(sticky=W + E, row=1,
                                  column=0, columnspan=2, padx=10)
@@ -29,17 +31,17 @@ class Editor():
         self.program_editor.focus()
 
         self.run_button = Button(
-            root, text='Find Query result', height=2, width=20, command=self.run_query)
+            root, text='Find Query result', height=2, width=20, command=self.run_query, font=ft)
 
         self.run_button.grid(sticky=E, row=3, column=1, pady=3, padx=10)
         self.result_label = Label(
-            root, text="Query result:", padx=10, pady=1)
+            root, text="Query result:", padx=10, pady=1, font=ft)
 
         self.result_label.grid(
             sticky="W", row=4, column=0, columnspan=2, padx=10, pady=3)
 
         self.result_display = ScrolledText(
-            root, width=100, height=10, padx=10, pady=10)
+            root, width=100, height=10, padx=10, pady=10, font=ft)
 
         self.result_display.grid(
             row=5, column=0, columnspan=2, padx=10, pady=7)
@@ -154,5 +156,4 @@ if __name__ == "__main__":
     editor = Editor(root)
 
     root.resizable(width=FALSE, height=FALSE)
-
     root.mainloop()

@@ -31,8 +31,6 @@ BEGIN {Test}
    r := 1;
    s := 'Hello World';
    P1(a, s + ' Meow');
-   WRITELN('Please enter a number to calculate the factorial:');
-   {READLN(a);}
-   {WRITELN(P2(a));}
+   WRITELN('Please enter a number to calculate the factorial:');   {WRITELN(P2(a));}
    WRITELN(a);
 END.  {Test}
