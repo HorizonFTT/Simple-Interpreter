@@ -104,20 +104,20 @@ class SemanticAnalyzer(NodeVisitor):
         self.current_scope.insert(var_symbol)
 
     def visit_Assign(self, node):
-        self.visit(node.right)
-        self.visit(node.left)
-        # # right-hand side
-        # value_type=self.visit(node.right).type
-        # # left-hand side
-        # var_type=self.visit(node.left).type
-        # if value_type != var_type:
-        #     raise Exception(
-        #         f'Error: Can\'t assign {value_type} to {var_type}' 
-        #     )
+        # self.visit(node.right)
+        # self.visit(node.left)
+        # right-hand side
+        value_type = self.visit(node.right).type
+        # left-hand side
+        var_type = self.visit(node.left).type
+        if value_type.replace('_CONST', '') != var_type:
+            raise Exception(
+                f'Error: Can\'t assign {value_type} to {var_type}'
+            )
 
     def visit_Var(self, node):
-        var_name=node.value
-        var_symbol=self.current_scope.lookup(var_name)
+        var_name = node.value
+        var_symbol = self.current_scope.lookup(var_name)
         if var_symbol is None:
             raise Exception(
                 "Error: Symbol(identifier) not found '%s'" % var_name
@@ -134,12 +134,14 @@ class SemanticAnalyzer(NodeVisitor):
         pass
 
     def visit_Call(self, node):
-        call_name=node.procedure
-        var_symbol=self.current_scope.lookup(call_name)
+        call_name = node.procedure
+        var_symbol = self.current_scope.lookup(call_name)
         if var_symbol is None:
             raise Exception(
                 "Error: Symbol(identifier) not found '%s'" % call_name
             )
+        params = node.params
+        scope = self.current_scope.lookup(call_name)
 
     def analyze(self, tree):
         try:

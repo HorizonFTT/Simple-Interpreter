@@ -12,16 +12,16 @@ class Editor():
         self.root = root
         self.file_path = None
         self.root.title('Pascal Interpreter')
-        ft = font.Font(family='Consolas', size=12)
+        self.ft = font.Font(family='Consolas', size=12)
 
         self.program_editor_label = Label(
-            root, text="Pascal Program: ", padx=10, pady=1, font=ft)
+            root, text="Pascal Program: ", padx=10, pady=1, font=self.ft)
 
         self.program_editor_label.grid(
             sticky="W", row=0, column=0, columnspan=2, pady=3)
 
         self.program_editor = ScrolledText(
-            root, width=100, height=25, padx=10, pady=10, font=ft)
+            root, width=65, height=20, padx=10, pady=10, font=self.ft)
 
         self.program_editor.grid(sticky=W + E, row=1,
                                  column=0, columnspan=2, padx=10)
@@ -31,17 +31,17 @@ class Editor():
         self.program_editor.focus()
 
         self.run_button = Button(
-            root, text='Find Query result', height=2, width=20, command=self.run_query, font=ft)
+            root, text='Run', height=2, width=20, command=self.run_query, font=self.ft)
 
         self.run_button.grid(sticky=E, row=3, column=1, pady=3, padx=10)
         self.result_label = Label(
-            root, text="Query result:", padx=10, pady=1, font=ft)
+            root, text="Result:", padx=10, pady=1, font=self.ft)
 
         self.result_label.grid(
             sticky="W", row=4, column=0, columnspan=2, padx=10, pady=3)
 
         self.result_display = ScrolledText(
-            root, width=100, height=10, padx=10, pady=10, font=ft)
+            root, width=65, height=8, padx=10, pady=10, font=self.ft)
 
         self.result_display.grid(
             row=5, column=0, columnspan=2, padx=10, pady=7)
@@ -51,7 +51,7 @@ class Editor():
     def create_file_menu(self):
         self.menu_bar = Menu(root)
 
-        file_menu = Menu(self.menu_bar, tearoff=0)
+        file_menu = Menu(self.menu_bar, tearoff=0, font=self.ft)
 
         file_menu.add_command(label="Open...", underline=1,
                               command=self.open_file)
