@@ -1,10 +1,10 @@
-from lexer import Lexer
-from token_types import *
-from visitor import NodeVisitor
-from myparser import Parser
-from semantic import SemanticAnalyzer
-from symbol import ScopedSymbolTable
-from frame import Frame
+from Lexer.lexer import Lexer
+from Lexer.token_types import *
+from Parser.visitor import NodeVisitor
+from Parser.myparser import Parser
+from Semantic.semantic import SemanticAnalyzer
+from Semantic.symbol import ScopedSymbolTable
+from Interpreter.frame import Frame
 import logging
 import sys
 

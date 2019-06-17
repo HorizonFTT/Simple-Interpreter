@@ -1,5 +1,5 @@
 import logging
-from interperter import Interpreter
+from Interpreter.interpreter import Interpreter
 
 def main():
     import sys

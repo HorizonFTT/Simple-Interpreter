@@ -1,6 +1,6 @@
 import logging
-from visitor import NodeVisitor
-import symbol
+from Parser.visitor import NodeVisitor
+from Semantic import symbol
 
 
 class SemanticAnalyzer(NodeVisitor):

@@ -1,4 +1,4 @@
-from symbol import *
+from Semantic.symbol import *
 import logging
 
 

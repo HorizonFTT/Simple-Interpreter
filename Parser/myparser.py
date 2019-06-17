@@ -1,6 +1,6 @@
-from lexer import Lexer
-from token_types import *
-from ast import *
+from Lexer.lexer import Lexer
+from Lexer.token_types import *
+from Parser.ast import *
 
 
 class Parser(object):
