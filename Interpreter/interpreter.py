@@ -123,11 +123,6 @@ class Interpreter(NodeVisitor):
     def visit_FunctionDecl(self, node):
         self.visit_ProcedureDecl(node)
 
-    # def return_value(self, type_node):
-    #     value = self.current_frame.return_value
-    #     if type_node.value==INTEGER:
-    #         node=
-
     def call_bulidin(self, node):
         call_name = node.procedure
         if call_name == 'WRITELN':

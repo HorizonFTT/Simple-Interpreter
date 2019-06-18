@@ -41,8 +41,10 @@ class Parser(object):
         return node
 
     def declarations(self):
-        """declarations : (VAR (variable_declaration SEMI)+)*
+        """
+        declarations : (VAR (variable_declaration SEMI)+)*
                         | (PROCEDURE ID (LPAREN formal_parameter_list RPAREN)? SEMI block SEMI)*
+                        | (FUNCTION ID (LPAREN formal_parameter_list RPAREN)? COLON type_spec SEMI block SEMI)*
                         | empty
         """
         declarations = []
@@ -149,8 +151,10 @@ class Parser(object):
         return var_declarations
 
     def type_spec(self):
-        """type_spec : INTEGER
-                     | REAL
+        """
+        type_spec : INTEGER(_CONST)?
+                     | REAL(_CONST)?
+                     | STRING(_CONST)?
         """
         token = self.current_token
         if self.current_token.type == INTEGER:
@@ -195,6 +199,10 @@ class Parser(object):
         """
         statement : compound_statement
                   | assignment_statement
+                  | expr
+                  | if_else
+                  | _for
+                  | _while
                   | empty
         """
         if self.current_token.type == BEGIN:
@@ -216,6 +224,9 @@ class Parser(object):
         return node
 
     def if_else(self):
+        """
+        if_else : IF condition THEN statement (ELSE statement)?
+        """
         self.eat(IF)
         result = self.condition()
         self.eat(THEN)
@@ -228,6 +239,9 @@ class Parser(object):
         return IfElse(result, true_statement, false_statement)
 
     def _while(self):
+        """
+        _while : WHILE condition DO statement
+        """
         self.eat(WHILE)
         result = self.condition()
         self.eat(DO)
@@ -235,6 +249,9 @@ class Parser(object):
         return While(result, statement)
 
     def _for(self):
+        """
+        _for : FOR assignment_statement TO expr DO statement
+        """
         self.eat(FOR)
         beg = self.assignment_statement()
         self.eat(TO)
@@ -244,6 +261,9 @@ class Parser(object):
         return For(beg, end, statement)
 
     def condition(self):
+        """
+        condition : expr (LESS_THAN|GREATER_THAN|EQUA expr)*
+        """
         left = self.expr()
         op_type = self.current_token.type
         if op_type in (LESS_THAN, GREATER_THAN, EQUAL):
@@ -265,6 +285,9 @@ class Parser(object):
         return node
 
     def call(self):
+        """
+        call : ID LPAREN expr (COMMA expr)* RPAREN SEMI
+        """
         call_name = self.current_token.value
         self.eat(CALL)
         params = []
@@ -325,12 +348,14 @@ class Parser(object):
         return node
 
     def factor(self):
-        """factor : PLUS factor
+        """
+        factor : PLUS factor
                   | MINUS factor
                   | INTEGER_CONST
                   | REAL_CONST
                   | LPAREN expr RPAREN
                   | variable
+                  | call
         """
         token = self.current_token
         if token.type == PLUS:
@@ -367,29 +392,42 @@ class Parser(object):
         program : PROGRAM variable SEMI block DOT
         block : declarations compound_statement
         declarations : (VAR (variable_declaration SEMI)+)*
-           | (PROCEDURE ID (LPAREN formal_parameter_list RPAREN)? SEMI block SEMI)*
-           | empty
+                        | (PROCEDURE ID (LPAREN formal_parameter_list RPAREN)? SEMI block SEMI)*
+                        | (FUNCTION ID (LPAREN formal_parameter_list RPAREN)? COLON type_spec SEMI block SEMI)*
+                        | empty
         variable_declaration : ID (COMMA ID)* COLON type_spec
         formal_params_list : formal_parameters
                            | formal_parameters SEMI formal_parameter_list
         formal_parameters : ID (COMMA ID)* COLON type_spec
-        type_spec : INTEGER
+        type_spec : INTEGER(_CONST)?
+                    | REAL(_CONST)?
+                    | STRING(_CONST)?
         compound_statement : BEGIN statement_list END
         statement_list : statement
                        | statement SEMI statement_list
         statement : compound_statement
-                  | assignment_statement
-                  | empty
+                | assignment_statement
+                | expr
+                | if_else
+                | _for
+                | _while
+                | empty
         assignment_statement : variable ASSIGN expr
+        if_else : IF condition THEN statement (ELSE statement)?
+        _while : WHILE condition DO statement
+        _for : FOR assignment_statement TO expr DO statement
+        condition : expr (LESS_THAN|GREATER_THAN|EQUA expr)*
+        call : ID LPAREN expr (COMMA expr)* RPAREN SEMI
         empty :
         expr : term ((PLUS | MINUS) term)*
         term : factor ((MUL | INTEGER_DIV | FLOAT_DIV) factor)*
         factor : PLUS factor
-               | MINUS factor
-               | INTEGER_CONST
-               | REAL_CONST
-               | LPAREN expr RPAREN
-               | variable
+                | MINUS factor
+                | INTEGER_CONST
+                | REAL_CONST
+                | LPAREN expr RPAREN
+                | variable
+                | call
         variable: ID
         """
         node = self.program()
