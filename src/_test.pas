@@ -5,5 +5,5 @@ VAR
    s : STRING;
 
 BEGIN {Test}
-   WRITELN(a);
+   WRITELN(b);
 END.  {Test}
