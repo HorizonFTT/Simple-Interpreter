@@ -60,8 +60,9 @@ class ScopedSymbolTable(object):
     def _init_builtins(self):
         self.insert(BuiltinTypeSymbol('INTEGER'))
         self.insert(BuiltinTypeSymbol('REAL'))
-        self.insert(ProcedureSymbol("WRITELN"))
-        self.insert(ProcedureSymbol("READLN"))
+        self.insert(BuiltinTypeSymbol('STRING'))
+        self.insert(ProcedureSymbol("WRITELN", [VarSymbol("_", None)]))
+        self.insert(ProcedureSymbol("READLN", [VarSymbol("_", None)]))
 
 
     def __str__(self):

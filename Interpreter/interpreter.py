@@ -4,7 +4,7 @@ from Parser.visitor import NodeVisitor
 from Parser.myparser import Parser
 from Semantic.semantic import SemanticAnalyzer
 from Semantic.symbol import ScopedSymbolTable
-from Interpreter.frame import Frame
+from .frame import Frame
 import logging
 import sys
 

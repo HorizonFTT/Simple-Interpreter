@@ -1,6 +1,6 @@
 from tkinter import Tk, Text, Menu, filedialog, Label, Button, END, W, E, FALSE, font
 from tkinter.scrolledtext import ScrolledText
-from interperter import Interpreter
+from Interpreter.interpreter import Interpreter
 import subprocess
 import sys
 

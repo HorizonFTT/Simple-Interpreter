@@ -1,6 +1,6 @@
 from Lexer.lexer import Lexer
 from Lexer.token_types import *
-from Parser.ast import *
+from .ast import *
 
 
 class Parser(object):

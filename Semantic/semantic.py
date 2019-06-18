@@ -109,7 +109,7 @@ class SemanticAnalyzer(NodeVisitor):
         # right-hand side
         value_type = self.visit(node.right).type
         # left-hand side
-        var_type = self.visit(node.left).type
+        var_type = self.visit(node.left).type.__str__()
         if value_type.replace('_CONST', '') != var_type:
             raise Exception(
                 f'Error: Can\'t assign {value_type} to {var_type}'
@@ -135,17 +135,29 @@ class SemanticAnalyzer(NodeVisitor):
 
     def visit_Call(self, node):
         call_name = node.procedure
-        var_symbol = self.current_scope.lookup(call_name)
-        if var_symbol is None:
+        proc_symbol = self.current_scope.lookup(call_name)
+        if proc_symbol is None:
             raise Exception(
                 "Error: Symbol(identifier) not found '%s'" % call_name
             )
-        params = node.params
-        scope = self.current_scope.lookup(call_name)
+        for param, f in zip(node.params, proc_symbol.params):
+            param_name = self.current_scope.lookup(param.value)
+            if param_name is None:
+                raise Exception(
+                    "Error: Symbol(identifier) not found '%s'" % param.value
+                )
+            if f.type is None:
+                continue
+            param_type = self.current_scope.lookup(param.type_node.value)
+            if param_type != f.type:
+                raise Exception(
+                f'Error: Can\'t assign {param_type} to {f.type}'
+            )
 
     def analyze(self, tree):
         try:
             self.visit(tree)
         except Exception as e:
             print(e)
+            exit(1)
         return self.scopes
