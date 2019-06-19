@@ -2,7 +2,6 @@ import logging
 from Parser.visitor import NodeVisitor
 from Semantic import symbol
 
-
 class SemanticAnalyzer(NodeVisitor):
     def __init__(self):
         self.scopes = {}
@@ -141,14 +140,18 @@ class SemanticAnalyzer(NodeVisitor):
                 "Error: Symbol(identifier) not found '%s'" % call_name
             )
         for param, f in zip(node.params, proc_symbol.params):
-            param_name = self.current_scope.lookup(param.value)
-            if param_name is None:
+            if hasattr(param, 'token') and param.token.type != "ID":
+                continue
+            if hasattr(param, 'value') is False:
+                continue
+            param_symbol = self.current_scope.lookup(param.value)
+            if param_symbol is None:
                 raise Exception(
                     "Error: Symbol(identifier) not found '%s'" % param.value
                 )
             if f.type is None:
                 continue
-            param_type = self.current_scope.lookup(param.type_node.value)
+            param_type = param_symbol.type
             if param_type != f.type:
                 raise Exception(
                 f'Error: Can\'t assign {param_type} to {f.type}'

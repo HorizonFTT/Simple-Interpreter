@@ -73,7 +73,7 @@ class Editor():
     def run_query(self):
         self.result_display.delete('1.0', END)
 
-        self.save_file_as('_test.pas')
+        self.save_file_as(f'{sys.path[0]}/_test.pas')
         p = subprocess.Popen(f'python {sys.path[0]}/spi.py {sys.path[0]}/_test.pas', stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                              shell=True, universal_newlines=True)
         output_array = []
