@@ -16,7 +16,7 @@ class Interpreter(NodeVisitor):
         self.current_frame = None
 
         if text is None:
-            text = open(f'{sys.path[0]}/{sys.argv[1]}', 'r').read()
+            text = open(f'{sys.argv[1]}', 'r').read()
 
         lexer = Lexer(text)
         parser = Parser(lexer)
